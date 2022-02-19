@@ -51,7 +51,7 @@ Server:
 
   run terminal
 
-       ./proxy -addr :80 -dstAddr 127.0.0.1:22
+       ./sshProxy -addr :80 -dstAddr 127.0.0.1:22
        
        
 # For use SSL on mode STUNNEL
@@ -65,4 +65,4 @@ Server:
       Port: 443      
   
     Server:
-       ./proxy -addr :80 -tls -tls_addr :443 -private_key /root/cert/fullchain.pem -public_key /root/cert/yourdomaintls.key
+       ./sshProxy -addr :80 -tls -tls_addr :443 -private_key /root/cert/fullchain.pem -public_key /root/cert/yourdomaintls.key
