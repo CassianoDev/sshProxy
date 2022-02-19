@@ -1,5 +1,5 @@
 # sshProxy
-SSH over HTTP Websocket Proxy with SSL SNI Support
+SSH over HTTP Websocket Proxy with SSL SNI Support (up to 20 times faster than Python similar proxy)
 
 Tunnel for SSH with HTTP Websocket handler.
 
