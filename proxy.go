@@ -14,7 +14,7 @@ type proxy struct {
 	tls *bool
 	address, dstAddress, tlsAddress,
 	handshakeCode, tlsPrivateKey,
-	tlsPublicKey *string
+	tlsPublicKey, tlsMode *string
 }
 
 type sshProxy interface {
@@ -33,6 +33,7 @@ func main() {
 		tls:           flag.Bool("tls", false, "Set true to use TLS"),
 		tlsPrivateKey: flag.String("private_key", "/home/example/private.pem", "Set path to your private certificate if use TLS."),
 		tlsPublicKey:  flag.String("public_key", "/home/example/public.key", "Set path to your public certificate if use TLS."),
+		tlsMode:       flag.String("tls_mode", "handshake", "Set TLS mode, if 'handshake' set, response  client with status 101/200 etc, if 'stunnel' set, not response client with status."),
 	}
 	flag.Parse()
 	if *SSHProxy.tls {
@@ -119,7 +120,7 @@ func (p *proxy) Handler(ClientConn sshProxy, tlsClient bool) {
 		return
 	}
 
-	if tlsClient {
+	if tlsClient && *p.tlsMode == "stunnel" {
 		go copyStream(sshConn, ClientConn)
 		go copyStream(ClientConn, sshConn)
 	} else {
