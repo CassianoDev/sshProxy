@@ -75,4 +75,5 @@ Usage:
 
 # Get your free TLS certificate on CertBot
 
+     sudo certbot certonly --webroot
      https://certbot.eff.org/instructions?ws=webproduct&os=ubuntufocal 
