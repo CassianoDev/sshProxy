@@ -71,3 +71,8 @@ Usage:
   
     Server Ex:
        ./sshProxy -tls_mode "handshake" -addr :80 -tls -tls_addr :443 -private_key /root/cert/fullchain.pem -public_key /root/cert/yourdomaintls.key
+
+
+# Get your free TLS certificate on CertBot
+
+     https://certbot.eff.org/instructions?ws=webproduct&os=ubuntufocal 
