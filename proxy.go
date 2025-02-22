@@ -1,7 +1,9 @@
 package main
 
 import (
+	"crypto/sha1"
 	"crypto/tls"
+	"encoding/base64"
 	"flag"
 	"io"
 	"log"
@@ -109,12 +111,23 @@ func (p *proxy) Handler(ClientConn sshProxy, tlsClient bool) {
 			return
 		}
 	} else {
-		_, err := ClientConn.Write([]byte("HTTP/1.1 101 Ok\r\n\r\n"))
+		secWebSocketKey := "Y2FmcnQ2NTRlY2Z2Z3ludTg="
+		// Compute o Sec-WebSocket-Accept
+		h := sha1.New()
+		h.Write([]byte(secWebSocketKey + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"))
+		secWebSocketAccept := base64.StdEncoding.EncodeToString(h.Sum(nil))
+		// Escreva a resposta de handshake
+		resp := "HTTP/1.1 101 OK Switching Protocols\r\n" +
+			"Upgrade: websocket\r\n" +
+			"Connection: Upgrade\r\n" +
+			"Sec-WebSocket-Accept: " + secWebSocketAccept + "\r\n\r\n"
+
+		_, err := ClientConn.Write([]byte(resp))
 		if err != nil {
 			return
 		}
 	}
-	sshConn, err := net.DialTimeout("tcp", *p.dstAddress, 15*time.Second)
+	sshConn, err := net.DialTimeout("tcp", *p.dstAddress, 50*time.Second)
 	if err != nil {
 		log.Println("Failed to call destination. ", err.Error())
 		return
